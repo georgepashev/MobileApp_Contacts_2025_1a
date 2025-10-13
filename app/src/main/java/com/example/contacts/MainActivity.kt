@@ -12,6 +12,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -51,6 +52,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun matchesRegex(regex: String, text: String): Boolean {
+        return try {
+            Regex(regex).matches(text)
+        } catch (e: Exception) {
+            false // in case of invalid regex
+        }
+    }
+    fun isValidEmail(email: String): Boolean {
+        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
+        return matchesRegex(emailRegex, email)
+    }
+    fun isValidPhone(phone: String): Boolean {
+        val phoneRegex = "^\\+?[0-9]{7,15}$"
+        return matchesRegex(phoneRegex, phone)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -72,15 +89,8 @@ class MainActivity : AppCompatActivity() {
         photoRepo = PhotoRepository(this)
 
         RefreshList()
-
-
-
-
-
-
-
-
-
+        etEmail?.addTextChangedListener { ValidateInput() }
+        etPhone?.addTextChangedListener { ValidateInput() }
 
 
 
@@ -97,6 +107,9 @@ class MainActivity : AppCompatActivity() {
                 photoUrl = etPhotoUrl?.text.toString().trim().ifBlank { null },
                 photoPath = pickedPhotoPath
             )
+
+
+
 
             //vm.add(contact)
 
@@ -120,6 +133,20 @@ class MainActivity : AppCompatActivity() {
 
 // reset
 
+        }
+    }
+
+    private fun ValidateInput() {
+        if (!isValidEmail(etEmail?.text.toString())) {
+            etEmail?.setBackgroundColor(0xff0000)
+        }
+        if (!isValidPhone(etPhone?.text.toString())) {
+            etPhone?.setBackgroundColor(0xff0000)
+        }
+        if (isValidEmail(etEmail?.text.toString()) && isValidPhone(etPhone?.text.toString())) {
+            btnAdd?.isEnabled = true
+        } else {
+            btnAdd?.isEnabled = false
         }
     }
 
