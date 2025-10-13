@@ -1,11 +1,13 @@
 package com.example.contacts
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -29,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private var btnAdd: Button? = null
     private var ivPreview : ImageView? = null
     private var rvContacts : RecyclerView? = null
+    private var  adapter : ContactAdapter? = null
 
 
     private val vm: ContactViewModel by viewModels()
@@ -63,8 +66,19 @@ class MainActivity : AppCompatActivity() {
         ivPreview = findViewById(R.id.ivPreview)
         rvContacts = findViewById(R.id.rvContacts)
 
-
+        adapter = ContactAdapter()
+        rvContacts?.layoutManager = LinearLayoutManager(this)
+        rvContacts?.adapter = adapter
         photoRepo = PhotoRepository(this)
+
+        RefreshList()
+
+
+
+
+
+
+
 
 
 
@@ -83,20 +97,49 @@ class MainActivity : AppCompatActivity() {
                 photoUrl = etPhotoUrl?.text.toString().trim().ifBlank { null },
                 photoPath = pickedPhotoPath
             )
-            vm.add(contact)
 
-            val adapter = ContactAdapter()
-            rvContacts?.adapter = adapter
+            //vm.add(contact)
+
+            var t = Thread{
+                var db = AppDatabase.get(applicationContext)
+                db.contactDao().insert(contact)
+                runOnUiThread {
+                    RefreshList()
+                    etName?.text?.clear()
+                    etPhone?.text?.clear()
+                    etEmail?.text?.clear()
+                    etAddress?.text?.clear()
+                    etPhotoUrl?.text?.clear()
+                    pickedPhotoPath = null
+                    ivPreview?.setImageResource(android.R.drawable.ic_menu_gallery)
+
+                }
+            }
+            t.start()
 
 
 // reset
-            etName?.text?.clear()
-            etPhone?.text?.clear()
-            etEmail?.text?.clear()
-            etAddress?.text?.clear()
-            etPhotoUrl?.text?.clear()
-            pickedPhotoPath = null
-            ivPreview?.setImageResource(android.R.drawable.ic_menu_gallery)
+
         }
+    }
+
+    private fun RefreshList() {
+        var t = Thread {
+            var listContacts = AppDatabase.get(applicationContext).contactDao().getAll()
+
+            //
+
+            runOnUiThread {
+                Toast.makeText(applicationContext, "DBG1 num: "+listContacts.size, Toast.LENGTH_LONG).show()
+
+                adapter?.submitList(listContacts)
+
+
+                Toast.makeText(applicationContext, "DBG2", Toast.LENGTH_LONG).show()
+            }
+            //
+
+        }
+        t.start()
     }
 }

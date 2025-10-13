@@ -1,10 +1,12 @@
 package com.example.contacts
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +14,7 @@ import coil.load
 import java.io.File
 
 class ContactAdapter : ListAdapter<Contact, ContactAdapter.VH>(DIFF) {
+
 
     object DIFF : DiffUtil.ItemCallback<Contact>() {
         override fun areItemsTheSame(oldItem: Contact, newItem: Contact) = oldItem.id == newItem.id
@@ -41,10 +44,14 @@ class ContactAdapter : ListAdapter<Contact, ContactAdapter.VH>(DIFF) {
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         val c = getItem(position)
+        //Toast.makeText(applicationContext, "DBG1.1", Toast.LENGTH_LONG).show()
         holder.b.tvName.text = c.name
         holder.b.tvPhone.text = c.phone
         holder.b.tvEmail.text = c.email
         holder.b.tvAddress.text = c.address
+        //Toast.makeText(applicationContext, "DBG1.2", Toast.LENGTH_LONG).show()
+
+
 
         val imgView = holder.b.img
         when {

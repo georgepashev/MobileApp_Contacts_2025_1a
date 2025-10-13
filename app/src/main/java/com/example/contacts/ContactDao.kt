@@ -10,14 +10,14 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ContactDao {
     @Insert
-    suspend fun insert(contact: Contact): Long
+     fun insert(contact: Contact): Long
 
     @Update
-    suspend fun update(contact: Contact)
+     fun update(contact: Contact)
 
     @Delete
-    suspend fun delete(contact: Contact)
+     fun delete(contact: Contact)
 
     @Query("SELECT * FROM contacts")
-    fun getAll(): Flow<List<Contact>>
+    fun getAll(): List<Contact>
 }
