@@ -68,6 +68,11 @@ class MainActivity : AppCompatActivity() {
         return matchesRegex(phoneRegex, phone)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        RefreshList()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -87,6 +92,17 @@ class MainActivity : AppCompatActivity() {
         rvContacts?.layoutManager = LinearLayoutManager(this)
         rvContacts?.adapter = adapter
         photoRepo = PhotoRepository(this)
+
+        adapter?.lambdaOnClick = {  contact ->
+            val i = contact?.let {
+                Intent(applicationContext, UpdateDeleteActivity::class.java)
+                    .putExtra("contact_id", it.id)
+            }
+            //startActivity(i)
+            if (i != null) {
+                startActivityForResult(i, 200)
+            }
+        }
 
         RefreshList()
         etEmail?.addTextChangedListener { ValidateInput() }

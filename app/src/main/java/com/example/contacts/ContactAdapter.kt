@@ -15,6 +15,8 @@ import java.io.File
 
 class ContactAdapter : ListAdapter<Contact, ContactAdapter.VH>(DIFF) {
 
+    public  var lambdaOnClick  : ((Contact?) -> Unit)? = null
+
 
     object DIFF : DiffUtil.ItemCallback<Contact>() {
         override fun areItemsTheSame(oldItem: Contact, newItem: Contact) = oldItem.id == newItem.id
@@ -59,5 +61,14 @@ class ContactAdapter : ListAdapter<Contact, ContactAdapter.VH>(DIFF) {
             !c.photoUrl.isNullOrBlank() -> imgView.load(c.photoUrl)
             else -> imgView.setImageResource(android.R.drawable.sym_def_app_icon)
         }
+        
+        holder.itemView.setOnClickListener{ onItemClick(c)}
+        
+        
+    }
+
+    private fun onItemClick(c: Contact?) {
+        lambdaOnClick?.let { it(c) }
+
     }
 }
