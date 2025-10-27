@@ -104,6 +104,22 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        adapter?.lambdaOnMapClick = { contact ->
+
+            val intent = Intent(this, MapSmsActivity::class.java).apply {
+                if (contact != null) {
+                    putExtra("extra_name", contact.name)
+                }
+                if (contact != null) {
+                    putExtra("extra_phone", contact.phone)
+                }
+                if (contact != null) {
+                    putExtra("extra_address", contact.address)
+                }
+            }
+            startActivity(intent)
+        }
+
         RefreshList()
         etEmail?.addTextChangedListener { ValidateInput() }
         etPhone?.addTextChangedListener { ValidateInput() }

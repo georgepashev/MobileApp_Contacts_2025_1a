@@ -37,5 +37,10 @@ android:layout_weight="1">
     android:id="@+id/tvAddress"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/btnViewOnMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View on Map" />
 </LinearLayout>
     </LinearLayout>

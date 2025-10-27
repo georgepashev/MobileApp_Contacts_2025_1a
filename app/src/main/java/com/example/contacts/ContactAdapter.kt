@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -16,6 +17,7 @@ import java.io.File
 class ContactAdapter : ListAdapter<Contact, ContactAdapter.VH>(DIFF) {
 
     public  var lambdaOnClick  : ((Contact?) -> Unit)? = null
+    public var lambdaOnMapClick: ((Contact?) -> Unit)? = null
 
 
     object DIFF : DiffUtil.ItemCallback<Contact>() {
@@ -28,6 +30,7 @@ class ContactAdapter : ListAdapter<Contact, ContactAdapter.VH>(DIFF) {
         val tvEmail: TextView = root.findViewById(R.id.tvEmail)
         val tvAddress: TextView = root.findViewById(R.id.tvAddress)
         val img: ImageView = root.findViewById(R.id.img)
+        val btnViewOnMap: Button = root.findViewById(R.id.btnViewOnMap)
 
         companion object {
             fun inflate(inflater: LayoutInflater, parent: ViewGroup, attachToParent: Boolean): ItemContactBinding {
@@ -63,6 +66,7 @@ class ContactAdapter : ListAdapter<Contact, ContactAdapter.VH>(DIFF) {
         }
         
         holder.itemView.setOnClickListener{ onItemClick(c)}
+        holder.b.btnViewOnMap.setOnClickListener { lambdaOnMapClick?.let { it(c) } }
         
         
     }
