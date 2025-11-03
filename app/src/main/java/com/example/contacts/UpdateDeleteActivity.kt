@@ -132,6 +132,7 @@ class UpdateDeleteActivity : AppCompatActivity() {
                     photoRepo.deletePhoto(base.photoPath)
                 }
                 dao.update(updated)
+                enqueueOneTimeSync(applicationContext)
                 runOnUiThread {
                     Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show()
                     finish()
@@ -146,6 +147,7 @@ class UpdateDeleteActivity : AppCompatActivity() {
                 dao.delete(toDelete)
 // чистим и локалната снимка (ако има)
                 photoRepo.deletePhoto(toDelete.photoPath)
+                enqueueOneTimeSync(applicationContext)
                 runOnUiThread {
                     Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show()
                     finish()

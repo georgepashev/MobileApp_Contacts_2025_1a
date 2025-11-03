@@ -148,6 +148,7 @@ class MainActivity : AppCompatActivity() {
             var t = Thread{
                 var db = AppDatabase.get(applicationContext)
                 db.contactDao().insert(contact)
+                enqueueOneTimeSync(applicationContext)
                 runOnUiThread {
                     RefreshList()
                     etName?.text?.clear()
