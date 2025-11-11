@@ -9,11 +9,12 @@ class MapSmsPagerAdapter(
     private val address: String,
     private val name: String
 ) : FragmentStateAdapter(fa) {
-    override fun getItemCount() = 2
+    override fun getItemCount() = 3
     override fun createFragment(position: Int): Fragment {
-        return if (position == 0)
-            MapFragment.newInstance(address, name)
-        else
-            SmsFragment.newInstance(phone, name)
+        return when (position) {
+            0 -> MapFragment.newInstance(address, name)
+            1 -> SmsFragment.newInstance(phone, name)
+            else -> WeatherFragment.newInstance(address, name)
+        }
     }
 }

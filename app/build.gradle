@@ -17,6 +17,11 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        def props = new Properties()
+        def lpFile = rootProject.file("local.properties")
+        if (lpFile.exists()) props.load(lpFile.newDataInputStream())
+        buildConfigField "String", "OPEN_WEATHER_API_KEY",
+
     }
 
     buildTypes {
@@ -35,6 +40,7 @@ android {
     }
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
 }
 
@@ -46,6 +52,15 @@ dependencies {
     implementation libs.androidx.work.runtime.ktx
     ksp "androidx.room:room-compiler:2.8.2"
     implementation libs.androidx.room.common.jvm
+
+    //Retrofit
+    implementation "com.squareup.retrofit2:retrofit:2.11.0"
+    //implementation "com.squareup.retrofit2:converter-moshi:2.11.0"
+    //implementation "com.squareup.moshi:moshi-kotlin:1.15.1"
+    implementation "com.squareup.retrofit2:converter-gson:2.11.0"
+
+    implementation "com.squareup.okhttp3:logging-interceptor:4.12.0"
+
 
     // Import the Firebase BoM
     implementation platform('com.google.firebase:firebase-bom:34.5.0')

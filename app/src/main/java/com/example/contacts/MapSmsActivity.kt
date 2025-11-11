@@ -19,7 +19,11 @@ class MapSmsActivity : AppCompatActivity() {
         val adapter = MapSmsPagerAdapter(this, phone, address, name)
         pager.adapter = adapter
         TabLayoutMediator(tabs, pager) { tab, position ->
-            tab.text = if (position == 0) "Map" else "SMS"
+            tab.text = when (position) {
+                0 -> "Map"
+                1 -> "SMS"
+                else -> "Weather"
+            }
         }.attach()
     }
 }
